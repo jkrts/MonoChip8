@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\jrobe\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\jrobe\\.nuget\\packages"
+    ]
+  }
+}
