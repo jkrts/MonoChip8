@@ -229,51 +229,60 @@ class Chip8
                         V[x] = V[y];
 
                         PC += 2;
+
                         break;
 
                     case 0x0001:    // 8xy1: OR Vx, Vy - Set Vx = Vx OR Vy
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        V[x] = (byte)(V[x] | V[y]);
 
                         PC += 2;
+
                         break;
 
                     case 0x0002:    // 8xy2: AND Vx, Vy - Set Vx = Vx AND Vy
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        V[x] = (byte)(V[x] & V[y]);
 
                         PC += 2;
+
                         break;
 
                     case 0x0003:    // 8xy3: XOR Vx, Vy - Set Vx = Vx XOR Vy
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        V[x] = (byte)(V[x] ^ V[y]);
 
                         PC += 2;
+
                         break;
 
                     case 0x0004:    // 8xy4: ADD Vx, Vy - Set Vx = Vx + Vy, set VF = carry
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        ushort add = (ushort)(V[x] + V[y]);
+                        if(add > 255) V[0xF] = 1;
+                        V[x] = (byte)(add);
 
                         PC += 2;
+
                         break;
                 
                     case 0x0005:    // 8xy5: SUB Vx, Vy - Set Vx = Vx - Vy, set VF = NOT borrow
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        if(V[x] > V[y]) V[0xF] = 1; else V[0xF] = 0;
+                        V[x] = (byte)(V[x] - V[y]);
 
                         PC += 2;
+
                         break;
 
                     case 0x0006:    // 8xy6: SHR Vx {, Vy} - Set Vx = Vx SHR 1
