@@ -9,6 +9,8 @@ namespace monoChip8
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        Chip8 ch8;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -20,22 +22,8 @@ namespace monoChip8
         {
             // TODO: Add your initialization logic here
 
-            /* Disassembler disassembler = new Disassembler();
-            disassembler.LoadRom("IBMLogo.ch8");
-            disassembler.PrintMemory();
-            disassembler.Disassemble(); */
-
-            Chip8 ch8 = new Chip8();
+            ch8 = new Chip8();
             ch8.LoadRom("IBMLogo.ch8");
-            //ch8.PrintMemory();
-            ch8.PrintDisplay();
-
-            while(ch8.PC < 4096)
-            {
-                //Console.Clear();
-                ch8.EmulateCycle();
-                ch8.PrintDisplay();
-            }
 
             base.Initialize();
         }
@@ -53,7 +41,7 @@ namespace monoChip8
                 Exit();
 
             // TODO: Add your update logic here
-
+            ch8.EmulateCycle();
             base.Update(gameTime);
         }
 
@@ -62,6 +50,7 @@ namespace monoChip8
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            ch8.PrintDisplay();
 
             base.Draw(gameTime);
         }
