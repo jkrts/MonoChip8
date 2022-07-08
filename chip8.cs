@@ -156,20 +156,25 @@ class Chip8
                         PC += 2;
                         break;
 
-                    case 0x00EE:    // 00EE: RET - Return from subroutine 
-                        PC = stack[SP];
+                    case 0x00EE:    // 00EE: RET - Return from subroutine
                         --SP;
+                        PC = stack[SP];
+                        PC += 2;
+
                         break;
                 }
                 break;
+
             case 0x1000:    // 1nnn: JP addr - Jump to location nnn
                 PC = (ushort)(opcode & 0x0FFF);
+
                 break;
                 
             case 0x2000:    // 2nnn: CALL addr - Call subroutine at nnn
                 stack[SP] = PC;
-                ++SP;
+                SP++;
                 PC = (ushort)(opcode & 0x0FFF);
+
                 break;
 
             case 0x3000:    // 3xkk: SE Vx, byte - Skip next instruction if Vx = kk
@@ -179,7 +184,10 @@ class Chip8
                 if(V[x] == k)
                 {
                     PC += 4;
+                } else {
+                    PC += 2;
                 }
+
                 break;
 
             case 0x4000:    // 4xkk: SNE Vx, byte - Skip next instruction if Vx != kk
@@ -189,7 +197,10 @@ class Chip8
                 if(V[x] != k)
                 {
                     PC += 4;
+                } else {
+                    PC += 2;
                 }
+
                 break;
 
             case 0x5000:    // 5xy0: SE Vx, Vy - Skip next instruction if Vx = Vy
@@ -199,7 +210,10 @@ class Chip8
                 if(V[x] == V[y])
                 {
                     PC += 4;
+                } else {
+                    PC += 2;
                 }
+
                 break;
 
             case 0x6000:    // 6xkk: LD Vx, byte - Set Vx = kk
@@ -208,6 +222,7 @@ class Chip8
 
                 V[x] = k;
                 PC += 2;
+
                 break;
 
             case 0x7000:    // 7xkk: ADD Vx, byte - Set Vx = Vx + kk
@@ -321,6 +336,8 @@ class Chip8
                 if(V[x] != V[y])
                 {
                     PC += 4;
+                } else {
+                    PC += 2;
                 }
 
                 break;
@@ -332,7 +349,7 @@ class Chip8
                 break;
 
             case 0xB000:    // Bnnn: JP V0, add - Jump to location nnn + V0
-                PC = (ushort)(opcode & 0x0FFF + V[0]);
+                PC = (ushort)((opcode & 0x0FFF) + V[0]);
                 
                 break;
 
@@ -387,6 +404,8 @@ class Chip8
                         if(pressedKey == V[x])
                         {
                             PC += 4;
+                        } else {
+                            PC += 2;
                         }
 
                         break;
