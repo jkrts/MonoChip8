@@ -328,8 +328,14 @@ class Chip8
                 break;
 
             case 0xC000:    // Cxkk: RND Vx, byte - Set Vx = random byte AND kk
+                x = (byte)(opcode >> 8 & 0x000F);
+                k = (byte)(opcode & 0x00FF);
 
-                // SPECIAL! IMPLEMENT RANDOM NUMBER
+                Random rand = new Random();
+                byte randomByte = (byte)(rand.Next(0,256));
+
+                V[x] = (byte)(randomByte & k);
+                
                 PC += 2;
                 
                 break;
