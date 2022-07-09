@@ -12,8 +12,8 @@ class Chip8
     public ushort PC;
     byte SP;
     ushort[] stack;
-    bool drawFlag;
-    byte pressedKey;
+    public bool drawFlag;
+    byte[] keys;
 
     public Chip8()
     {
@@ -22,7 +22,7 @@ class Chip8
         display = new byte[64,32];
         InitDisplay();
         V = new byte[16];
-        for(int i = 0; i < 16; ++i)
+        for(int i = 0; i < 16; i++)
         {
             V[i] = 0;
         }
@@ -34,9 +34,15 @@ class Chip8
         SP = 0;
         stack = new ushort[16];
 
-        for(int i = 0; i < 16; ++i)
+        for(int i = 0; i < 16; i++)
         {
             stack[i] = 0;
+        }
+
+        keys = new byte[16];
+        for(int i = 0; i < 16; i++)
+        {
+            keys[i] = 1;
         }
 
         drawFlag = false;
@@ -122,7 +128,7 @@ class Chip8
         {
             for(int j = 0; j < 64; ++j)
             {
-                if(display[j,i]==0) Console.Write("0 ");
+                if(display[j,i]==0) Console.Write("- ");
                 else if(display[j,i]==1) Console.Write("1 ");
             }
             Console.Write("\n");
@@ -133,7 +139,7 @@ class Chip8
     {
         //fetch opcode
         ushort opcode = (ushort)(memory[PC] << 8 | memory[PC+1]);
-        Console.WriteLine("{0:X4}",opcode);
+        //Console.WriteLine("{0:X4}",opcode);
         //PC += 2;
         //decode opcode
 
@@ -401,7 +407,7 @@ class Chip8
                     case 0x009E:    // Ex9E: SKP Vx - Skip next instruction if key with the value of Vx is pressed
                         x = (byte)(opcode >> 8 & 0x000F);
                         
-                        if(pressedKey == V[x])
+                        if(keys[V[x]] == 1)
                         {
                             PC += 4;
                         } else {
@@ -413,9 +419,11 @@ class Chip8
                     case 0x00A1:    // ExA1: SKNP Vx - Skip next instruction if key with the value of Vx is not pressed
                         x = (byte)(opcode >> 8 & 0x000F);
                         
-                        if(pressedKey != V[x])
+                        if(keys[V[x]] != 1)
                         {
                             PC += 4;
+                        } else {
+                            PC += 2;
                         }
                         break;
                 }
@@ -434,9 +442,17 @@ class Chip8
 
                         // SPECIAL! Execution stops until key pressed
                         x = (byte)(opcode >> 8 & 0x000F);
-                        V[x] = pressedKey;
                         
-                        PC += 2;
+                        for(int i = 0; i < 16; i++)
+                        {
+                            if(keys[i] == 1)
+                            {
+                                V[x] = keys[i];
+                                PC += 2;
+                            }
+                        }
+                        
+                        
                         break;
 
                     case 0x0015:    // Fx15: LD DT, Vx - Set delay timer = Vx
@@ -462,7 +478,7 @@ class Chip8
                     
                     case 0x0029:    // Fx29: LD F, Vx - Set I = location of sprite for digit Vx
                         x = (byte)(opcode >> 8 & 0x000F);
-                        I = 0;
+                        I = V[x];
 
                         // SPECIAL!
 
@@ -494,7 +510,7 @@ class Chip8
                 } 
                 break;
         }
-        Console.Write("\n");
+        //Console.Write("\n");
 
         // update timers
     }

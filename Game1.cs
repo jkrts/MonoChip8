@@ -50,8 +50,11 @@ namespace monoChip8
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            ch8.PrintDisplay();
-
+            if(ch8.drawFlag)
+            {
+                ch8.PrintDisplay();
+                ch8.drawFlag = false;
+            }
             base.Draw(gameTime);
         }
     }
