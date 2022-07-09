@@ -448,7 +448,7 @@ class Chip8
 
                     case 0x0018:    // Fx18: LD ST, Vx - Set sound timer = Vx
                         x = (byte)(opcode >> 8 & 0x000F);
-                        delayTimer = V[x];
+                        soundTimer = V[x];
                         
                         PC += 2;
                         break;
