@@ -8,7 +8,6 @@ public class UIChipMemory
     int yPos;
     int width;
     int height;
-    int zDepth;
 
     int pixelSize;
     int startX;
@@ -16,15 +15,12 @@ public class UIChipMemory
     Color pixelColor;
     Texture2D pixel;
 
-    bool grid;
-
     public UIChipMemory(GraphicsDeviceManager gdm)
     {
         xPos = 0;
         yPos = 0;
         width = 640;
         height = 340;
-        zDepth = 1;
         pixelSize = width / 64; // 10
         startX = 300;
         startY = 362;
@@ -34,7 +30,6 @@ public class UIChipMemory
         Color[] colorData = {Color.White};
         pixel.SetData<Color>(colorData);
 
-        grid = true;
 }
 
     public void Draw(SpriteBatch sb, Chip8 ch8, SpriteFont font)
@@ -60,46 +55,43 @@ public class UIChipMemory
         sb.DrawString(font, "04", new Vector2(xPos + 10 + (cellWidth*7), startY+25), Color.White);
         sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*8), startY+25), Color.White);
         sb.DrawString(font, "06", new Vector2(xPos + 10 + (cellWidth*9), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*10), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*11), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*12), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*13), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*14), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*15), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*16), startY+25), Color.White);
-        sb.DrawString(font, "05", new Vector2(xPos + 10 + (cellWidth*17), startY+25), Color.White);
+        sb.DrawString(font, "07", new Vector2(xPos + 10 + (cellWidth*10), startY+25), Color.White);
+        sb.DrawString(font, "08", new Vector2(xPos + 10 + (cellWidth*11), startY+25), Color.White);
+        sb.DrawString(font, "09", new Vector2(xPos + 10 + (cellWidth*12), startY+25), Color.White);
+        sb.DrawString(font, "0A", new Vector2(xPos + 10 + (cellWidth*13), startY+25), Color.White);
+        sb.DrawString(font, "0B", new Vector2(xPos + 10 + (cellWidth*14), startY+25), Color.White);
+        sb.DrawString(font, "0C", new Vector2(xPos + 10 + (cellWidth*15), startY+25), Color.White);
+        sb.DrawString(font, "0D", new Vector2(xPos + 10 + (cellWidth*16), startY+25), Color.White);
+        sb.DrawString(font, "0E", new Vector2(xPos + 10 + (cellWidth*17), startY+25), Color.White);
         sb.DrawString(font, "0F", new Vector2(xPos + 10 + (cellWidth*18), startY+25), Color.White);
 
         sb.Draw(pixel, new Rectangle(xPos + 10 , startY+40,375, 1), Color.White);
         sb.Draw(pixel, new Rectangle(xPos + 10 + 45 , startY+40,1, 285), Color.White);
 
-        int currentAddress = ch8.PC - 0x40;
-        if(currentAddress < 0) currentAddress = 0;
-        ushort line = (ushort)(currentAddress - (currentAddress % 0x10));
+        ushort currentLine = (ushort)(ch8.PC - (ch8.PC % 0x10));
 
         int col = 0;
         int row = 0;
 
-        for(int i = 0; i < 0x130; i++)
+        for(int i = currentLine; i < currentLine + 0x130; i++)
         {
+            if(currentLine > 4095) break;
             if(col == 0)
             {
-                
-                sb.DrawString(font, line.ToString("X4"), new Vector2(xPos + 10 + (cellWidth*col), yPos+45+(15*row)), Color.White);
+                sb.DrawString(font, (currentLine+row*0x10).ToString("X4"), new Vector2(xPos + 10 + (cellWidth*col), yPos+45+(15*row)), Color.White);
             }
-            if(currentAddress+i == ch8.PC)
+            if(i == ch8.PC)
             {
-                sb.DrawString(font, ch8.memory[currentAddress+i].ToString("X2"), new Vector2(xPos +(cellWidth*3) + 10 + (cellWidth*col), yPos+45+(15*row)), Color.Yellow);
+                sb.DrawString(font, ch8.memory[i].ToString("X2"), new Vector2(xPos +(cellWidth*3) + 10 + (cellWidth*col), yPos+45+(15*row)), Color.Yellow);
             }else
             {
-                sb.DrawString(font, ch8.memory[currentAddress+i].ToString("X2"), new Vector2(xPos +(cellWidth*3) + 10 + (cellWidth*col), yPos+45+(15*row)), Color.White);
+                sb.DrawString(font, ch8.memory[i].ToString("X2"), new Vector2(xPos +(cellWidth*3) + 10 + (cellWidth*col), yPos+45+(15*row)), Color.White);
             }
             col += 1;
             if(col == 16)
             {
                 row += 1;
-                col = 0;
-                line += 0x10;
+                col = 0;                
             }
         }
         

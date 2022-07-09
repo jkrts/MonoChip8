@@ -8,8 +8,6 @@ public class UIChipState
     int yPos;
     int width;
     int height;
-    int zDepth;
-
     int pixelSize;
     int startX;
     int startY;
@@ -22,7 +20,6 @@ public class UIChipState
         yPos = 0;
         width = 280;
         height = 675;
-        zDepth = 1;
         pixelSize = width / 64; // 10
         startX = 5;
         startY = 26;

@@ -7,8 +7,6 @@ public class UIChipScreen
     int yPos;
     int width;
     int height;
-    int zDepth;
-
     int pixelSize;
     int startX;
     int startY;
@@ -23,7 +21,6 @@ public class UIChipScreen
         yPos = 0;
         width = 640;
         height = 320;
-        zDepth = 1;
         pixelSize = width / 64; // 10
         startX = 300;
         startY = 26;

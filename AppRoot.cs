@@ -33,7 +33,7 @@ namespace monoChip8
             _graphics.ApplyChanges();
 
             ch8 = new Chip8();
-            ch8.LoadRom("test_opcode.ch8");
+            ch8.LoadRom("IBMLogo.ch8");
             uiChipScreen = new UIChipScreen(_graphics);
             uiChipState = new UIChipState(_graphics);
             uiChipMemory = new UIChipMemory(_graphics);
