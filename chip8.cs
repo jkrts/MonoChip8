@@ -1,18 +1,17 @@
 using System;
 
-class Chip8
+public class Chip8
 {
-    byte[] memory;
-    byte[,] display;
+    public byte[] memory;
+    public byte[,] display;
 
-    byte[] V;
-    ushort I;
-    byte soundTimer;
-    byte delayTimer;
+    public byte[] V;
+    public ushort I;
+    public byte soundTimer;
+    public byte delayTimer;
     public ushort PC;
-    byte SP;
-    ushort[] stack;
-    public bool drawFlag;
+    public byte SP;
+    public ushort[] stack;
     byte[] keys;
 
     public Chip8()
@@ -45,7 +44,6 @@ class Chip8
             keys[i] = 1;
         }
 
-        drawFlag = false;
     }
 
     private void InitMemory()
@@ -158,7 +156,6 @@ class Chip8
                                 display[j,i] = 0;
                             }
                         }
-                        drawFlag = true;
                         PC += 2;
                         break;
 
@@ -396,7 +393,6 @@ class Chip8
                     }
                 }
 
-                drawFlag = true;
                 PC += 2;
 
                 break;

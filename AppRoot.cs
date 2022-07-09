@@ -4,14 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace monoChip8
 {
-    public class Game1 : Game
+    public class AppRoot : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Chip8 ch8;
+        public SpriteFont _font;
 
-        public Game1()
+        Chip8 ch8;
+        UIChipScreen uiChipScreen;
+        UIChipState uiChipState;
+        UIChipMemory uiChipMemory;
+
+        float timer;
+
+        public AppRoot()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -21,9 +28,17 @@ namespace monoChip8
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.ApplyChanges();
 
             ch8 = new Chip8();
             ch8.LoadRom("IBMLogo.ch8");
+            uiChipScreen = new UIChipScreen(_graphics);
+            uiChipState = new UIChipState(_graphics);
+            uiChipMemory = new UIChipMemory(_graphics);
+
+            timer = 0.0f;
 
             base.Initialize();
         }
@@ -31,6 +46,8 @@ namespace monoChip8
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _font = Content.Load<SpriteFont>(@"Fonts\Consolas");
 
             // TODO: use this.Content to load your game content here
         }
@@ -41,20 +58,24 @@ namespace monoChip8
                 Exit();
 
             // TODO: Add your update logic here
-            ch8.EmulateCycle();
+            timer += gameTime.ElapsedGameTime.Milliseconds;
+            if(timer > 1000.0f)
+            {
+                ch8.EmulateCycle();
+                timer = 0.0f;
+            }
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
 
             // TODO: Add your drawing code here
-            if(ch8.drawFlag)
-            {
-                ch8.PrintDisplay();
-                ch8.drawFlag = false;
-            }
+            uiChipScreen.Draw(_spriteBatch, ch8);
+            uiChipState.Draw(_spriteBatch, ch8, _font);
+            uiChipMemory.Draw(_spriteBatch, ch8, _font);
+    
             base.Draw(gameTime);
         }
     }
