@@ -452,7 +452,6 @@ class Chip8
                             }
                         }
                         
-                        
                         break;
 
                     case 0x0015:    // Fx15: LD DT, Vx - Set delay timer = Vx
