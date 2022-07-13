@@ -33,7 +33,8 @@ namespace monoChip8
             _graphics.ApplyChanges();
 
             ch8 = new Chip8();
-            ch8.LoadRom("IBMLogo.ch8");
+            //ch8.LoadRom("test_opcode.ch8");
+            ch8.LoadRom("font_test.ch8");
             uiChipScreen = new UIChipScreen(_graphics);
             uiChipState = new UIChipState(_graphics);
             uiChipMemory = new UIChipMemory(_graphics);
@@ -59,7 +60,7 @@ namespace monoChip8
 
             // TODO: Add your update logic here
             timer += gameTime.ElapsedGameTime.Milliseconds;
-            if(timer > 1000.0f)
+            if(timer > 30.0f)
             {
                 ch8.EmulateCycle();
                 timer = 0.0f;
