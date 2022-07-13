@@ -304,10 +304,11 @@ public class Chip8
                         break;
 
                     case 0x0006:    // 8xy6: SHR Vx {, Vy} - Set Vx = Vx SHR 1
+                        // Originally set Vx to Vy << 1 but not used anymore
                         x = (byte)(opcode >> 8 & 0x000F);
-                        y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        V[0xF] = (byte)(V[x] >> 7);
+                        V[x] = (byte)(V[x] >> 1);
 
                         PC += 2;
                         break;
@@ -316,16 +317,18 @@ public class Chip8
                         x = (byte)(opcode >> 8 & 0x000F);
                         y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        if(V[y] > V[x]) V[0xF] = 1; else V[0xF] = 0;
+                        V[x] = (byte)(V[y] - V[x]);
 
                         PC += 2;
                         break;
 
                     case 0x000E:    // 8xyE: SHL Vx {, Vy} - Set Vx = Vx SHL 1
+                        // Originally set Vx to Vy << 1 but not used anymore
                         x = (byte)(opcode >> 8 & 0x000F);
-                        y = (byte)(opcode >> 4 & 0x000F);
 
-                        // SPECIAL!
+                        V[0xF] = (byte)(V[x] >> 7 ); 
+                        V[x] = (byte)(V[x] << 1);
 
                         PC += 2;
                         break;
@@ -515,9 +518,9 @@ public class Chip8
                 } 
                 break;
         }
-        //Console.Write("\n");
 
-        // update timers
+        if(delayTimer > 0) delayTimer--;
+        if(soundTimer > 0) soundTimer--;
     }
 
 }
