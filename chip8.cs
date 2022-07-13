@@ -12,7 +12,7 @@ public class Chip8
     public ushort PC;
     public byte SP;
     public ushort[] stack;
-    byte[] keys;
+    public byte[] keys;
 
     public Chip8()
     {
