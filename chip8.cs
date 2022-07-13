@@ -54,7 +54,7 @@ public class Chip8
         }
 
         byte[] fontData = {
-            0xF0, 0x90, 0x90, 0x90, 0xF0,   // 0
+            0xF0, 0x90, 0x90, 0x90, 0xF0,   // 0 - 0x50
             0x20, 0x60, 0x20, 0x20, 0x70,   // 1
             0xF0, 0x10, 0xF0, 0x80, 0xF0,   // 2
             0xF0, 0x10, 0xF0, 0x10, 0xF0,   // 3
@@ -62,7 +62,7 @@ public class Chip8
             0xF0, 0x80, 0xF0, 0x10, 0xF0,   // 5
             0xF0, 0x80, 0xF0, 0x90, 0xF0,   // 6
             0xF0, 0x10, 0x20, 0x40, 0x40,   // 7
-            0x20, 0x60, 0x20, 0x20, 0x70,   // 8
+            0xF0, 0x90, 0xF0, 0x90, 0xF0,   // 8
             0xF0, 0x90, 0xF0, 0x10, 0xF0,   // 9
             0xF0, 0x90, 0xF0, 0x90, 0x90,   // A
             0xE0, 0x90, 0xE0, 0x90, 0xE0,   // B
@@ -473,33 +473,43 @@ public class Chip8
                     
                     case 0x0029:    // Fx29: LD F, Vx - Set I = location of sprite for digit Vx
                         x = (byte)(opcode >> 8 & 0x000F);
-                        I = V[x];
-
-                        // SPECIAL!
+                        I = (ushort)(0x50 + (V[x]*0x5)); 
 
                         PC += 2;
                         break;
                     
                     case 0x0033:    // Fx33: LD B, Vx - Store BCD representation of Vx in memory locations I, I+1, I+2
                         x = (byte)(opcode >> 8 & 0x000F);
-                        
-                        // SPECIAL!
+                        byte num = V[x];
+
+                        byte hundreds = (byte)(num / 100);
+                        byte tens = (byte)((num % 100 - num % 10)/10);
+                        byte ones = (byte)(num % 10);
+
+                        memory[I] = hundreds;
+                        memory[I+1] = tens;
+                        memory[I+2] = ones;
 
                         PC += 2;
                         break;
 
                     case 0x0055:    // Fx55: LD [I], Vx - Store registers V0 through Vx in memory starting at location I
                         x = (byte)(opcode >> 8 & 0x000F);
-                        
-                        // SPECIAL1
-
+                        for(int i = 0; i <= x; i++)
+                        {
+                            memory[I] = V[i];
+                            I++; 
+                        }
                         PC += 2;
                         break;
 
                     case 0x0065:    // Fx65: LD Vx, [I] - Read registers V0 through Vx from memory starting at location I
                         x = (byte)(opcode >> 8 & 0x000F);
-                        I = (ushort)(I + V[x]);
-                        
+                        for(int i = 0; i <= x; i++)
+                        {
+                            V[i] = memory[I];
+                            I++; 
+                        }
                         PC += 2;
                         break;
                 } 
