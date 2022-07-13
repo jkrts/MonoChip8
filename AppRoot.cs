@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace monoChip8
 {
@@ -34,8 +35,8 @@ namespace monoChip8
 
             ch8 = new Chip8();
 
-            //ch8.LoadRom("Roms/Keypad_Test.ch8");
-            ch8.LoadRom("Roms/test_opcode.ch8");
+            ch8.LoadRom("-Untitled-");
+            //ch8.LoadRom("Roms/test_opcode.ch8");
             //ch8.LoadRom("Roms/font_test.ch8");
 
             uiChipScreen = new UIChipScreen(_graphics);
@@ -63,22 +64,24 @@ namespace monoChip8
 
             KeyboardState keyboardState = Keyboard.GetState();
 
-            if(keyboardState.IsKeyDown(Keys.D1))ch8.keys[0x1] = 1;
-            if(keyboardState.IsKeyDown(Keys.D2))ch8.keys[0x2] = 1; 
-            if(keyboardState.IsKeyDown(Keys.D3))ch8.keys[0x3] = 1; 
-            if(keyboardState.IsKeyDown(Keys.D4))ch8.keys[0xC] = 1; 
-            if(keyboardState.IsKeyDown(Keys.Q))ch8.keys[0x4] = 1; 
-            if(keyboardState.IsKeyDown(Keys.W))ch8.keys[0x5] = 1; 
-            if(keyboardState.IsKeyDown(Keys.E))ch8.keys[0x6] = 1; 
-            if(keyboardState.IsKeyDown(Keys.R))ch8.keys[0xD] = 1; 
-            if(keyboardState.IsKeyDown(Keys.A))ch8.keys[0x7] = 1; 
-            if(keyboardState.IsKeyDown(Keys.S))ch8.keys[0x8] = 1; 
-            if(keyboardState.IsKeyDown(Keys.D))ch8.keys[0x9] = 1; 
-            if(keyboardState.IsKeyDown(Keys.F))ch8.keys[0xE] = 1; 
-            if(keyboardState.IsKeyDown(Keys.Z))ch8.keys[0xA] = 1; 
-            if(keyboardState.IsKeyDown(Keys.X))ch8.keys[0x0] = 1; 
-            if(keyboardState.IsKeyDown(Keys.C))ch8.keys[0xB] = 1;
-            if(keyboardState.IsKeyDown(Keys.V))ch8.keys[0xF] = 1;  
+            if(keyboardState.IsKeyDown(Keys.D1))
+            {
+                ch8.keys[0x1] = 1;
+                Console.WriteLine("1");
+            }
+            if(keyboardState.IsKeyDown(Keys.D2))
+            {
+                ch8.keys[0x2] = 1;
+                Console.WriteLine("2");
+            }
+            if(keyboardState.IsKeyUp(Keys.D1))
+            {
+                ch8.keys[0x1] = 0;
+            }
+            if(keyboardState.IsKeyUp(Keys.D2))
+            {
+                ch8.keys[0x2] = 0;
+            }
 
             // TODO: Add your update logic here
             timer += gameTime.ElapsedGameTime.Milliseconds;

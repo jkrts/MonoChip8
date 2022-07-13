@@ -41,7 +41,7 @@ public class Chip8
         keys = new byte[16];
         for(int i = 0; i < 16; i++)
         {
-            keys[i] = 1;
+            keys[i] = 0;
         }
 
     }
@@ -449,7 +449,9 @@ public class Chip8
                                 V[x] = keys[i];
                                 PC += 2;
                             }
+                            
                         }
+                        //PC -= 2;
                         
                         break;
 
