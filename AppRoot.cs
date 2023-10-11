@@ -34,7 +34,8 @@ namespace monoChip8
 
             ch8 = new Chip8();
             //ch8.LoadRom("Roms/Keypad_Test.ch8");
-            ch8.LoadRom("Roms/test_opcode.ch8");
+            ch8.LoadRom("C:\\Users\\jrobe\\Source\\Repos\\MonoChip8\\Roms\\test_opcode.ch8");
+            ///ch8.LoadRom("Roms/test_opcode.ch8");
             //ch8.LoadRom("Roms/font_test.ch8");
             uiChipScreen = new UIChipScreen(_graphics);
             uiChipState = new UIChipState(_graphics);
